@@ -1,24 +1,29 @@
-from random import *
 import time
 
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver import FirefoxOptions
 
+import pandas as pd
+
+
+opts = FirefoxOptions()
+opts.add_argument("--headless")
+browser = webdriver.Firefox(options=opts)
 
 def getSnippet(search_term):
 
-        from selenium import webdriver
-        from selenium.webdriver.common.keys import Keys
-        from selenium.webdriver import FirefoxOptions
 
-
-        opts = FirefoxOptions()
-        opts.add_argument("--headless")
-        browser = webdriver.Firefox(options=opts)
         browser.get("https://www.bing.com/search?q=" + search_term)
-
+        
         try:
-                snippet = browser.find_element_by_xpath("//div[contains(@class, 'b_caption hasdl')]")
+                #snippet = browser.find_element_by_xpath("//div[contains(@class, 'b_caption hasdl')]")
+                snippet = browser.find_element_by_xpath("//div[contains(@class, 'b_snippet')]")
+
                 snippet = snippet.text
-                browser.close()
+                snippet = ' '.join(snippet.split("\n")[1:])
+                print(snippet)
+                print(search_term)
                 return snippet
         except:
                 return 0
@@ -35,45 +40,29 @@ with open ("list.csv") as csvfile:
 
 def writeSheet(csvData):
         import csv
-        with open('test.csv', 'w') as csvfile:
-                writer = csv.writer(csvfile, delimiter=";")
+        with open('output_1s.csv', 'w') as csvfile:
+                writer = csv.writer(csvfile, delimiter="\t")
                 csvData[0] = csvData[0] +["Snippet"]
                 writer.writerow(csvData[0])
                 for row in csvData[1:]:
                         snippet = getSnippet(row[6])
                         if(snippet==0):
-                                test = bissiTest(row[6])
-                                if(test!=0):
-                                         writer.writerow(row+[snippet])
-                                         print(row)
-                                         time.sleep(3)
+                                snippet = "NaN"
+                                writer.writerow(row+[snippet])
+                                print(row + [snippet])
+                                #time.sleep(3)
                         else: 
-                                         writer.writerow(row+[snippet])
-                                         print(row)
-                                         time.sleep(3)                               
+                                writer.writerow(row+[snippet])
+                                print(row + [snippet])
+                                #ti                          
                 
                         
-def bissiTest(keyword):
-        print("------------------------Testmodus-------------------------")
-        returnSnippet = 0
-        for test in range(1,8):
-                snippet = getSnippet(keyword)
-                if(snippet!=0):
-                        print("------------------------Retreived Data-------------------------")
-                        returnSnippet = snippet
-                        break
-                else:
-                        time.sleep(randint(3,20))
-        if (returnSnippet!=""): 
-                return snippet
-        else:
-                return 0
-                print("------------------------Test denied-------------------------")
                              
                         
 
-writeSheet(your_lst)
-test = getSnippet("www.biersack.de")
+#writeSheet(your_lst)
+test = getSnippet("ICBC")
 print(test)
 
+browser.close()
 
