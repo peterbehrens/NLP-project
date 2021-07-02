@@ -1,22 +1,20 @@
 # NLP-Projekt: Klassifikation von Unternehmenssnippets
 ## Datenquellen
-Im Rahmen eines Praktikums wurden die Unternehmensdaten zunächst mithilfe einer Web-Scaper Extension von relevanten Webseiten gezogen, um eine Datenbasis für Sales-Aktivitäten zu haben. Mithilfe dieser Anwendung kann in kurzer Zeit eine hohe Anzahl an Unternehmensdaten angereichert werden, indem beispielweise Ausstellerlisten von Messen oder öffentliche Mitgliederdaten von Verbänden heruntergeladen werden. Zur Klassifizierung wurden den Unternehmenseinträgen zunächst händisch Segmente und Subsegmente zugeordnet.
+Die für dieses Projekt verwendeten Daten stammen von Kaggle.de (https://www.kaggle.com/ash316/forbes-top-2000-companies). Es wurde eine .csv Datei mit den Forbes Top 2000 Unternehmen weltweit verwendet. Der Datensatz ist wie folgt aufgebaut:
 
-| Unternehmensname  | Straße | PLZ | Land | TelefonNr. | Webseite | E-Mail | Segment   | Subsegment |
+| Rank  | Company | Country | Sales | Assets | Market Value | Sector | Industry   | Snippet |
 | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | 
-| XY AG  | Musterstr. 69  | 65283  | DE  | 0443 582  | www.xyag.de  | info@xyag.de | Industrial & Services | Service Bureau |  
+| 9  |Apple  | United States  | 217,5  | 3311  | 752  | Information Technology | Computer Hardware | ... |  
 
-~~Im Prinzip wurde eine manuelle Textklassifikation vorgenommen, um die Unternehmen in vorgegebene Kategorien einzuordnen. Im Zuge des Praktikums sind knapp 2000 klssifizierte Datenpunkte entstanden, die von der Salesabteilung und dem Marketing für die Neukundenakquise verwendet werden. Dieser Datensatz kann in der [list.csv](/list.csv) eingesehen werden.~~
+Zunächst sollte ein "realer" Datensatz aus dem Unternehmensumfeld verwendet werden, um ein möglichst realitätsnahes Projekt zu gestalten. Jedoch haben wir ziemlich schnell festgestellt, dass die im Rahmen eines Praktikums mit einem Web-Scraper gezogenen Daten zu spezifisch sind und man auf dieser Basis kein gutes Modell trainieren könnte. Das liegt vor allem daran, dass fast alle Unternehmen einem bestimmten Bereich zuordbar sind, da er als Vertical für Sales Aktivitäten ausgewählt wurde. 
 
-Im Verlauf des Projektes stellte sich heraus, dass der geplante Datensatz zu unausgeglichen ist. Deshalb wechselten wir auf den Forbes Top 2000 Companies Datensatz. Dieser enthält in ähnlicher Form wie der angedachte Datensatz Firmen und deren entsprechenden Sector.
-
-Für das Projekt können die gelabelten Datensätze für das Training des Klassifizierungsalgorithmus verwendet werden. 
+Daher haben wir uns für einen anderen Datensatz entschieden, bei dem ebenfalls Unternehmen in verschiedene Sektoren eingeteilt sind. Diese Klassifizeirung ist wichtig, um die gelabelten Datensätze für das Training des Klassifizierungsalgorithmus verwenden zu können.  
 
 Für das Natural Language Processing nutzen wir sogenannte Snippets, das ist die Kurzbeschreibung der Suchmaschine (in dem Fall [Bing](www.bing.com). Diese enthalten meist alle relevnaten Informationen und Begriffe, da der Suchmaschinennutzer darüber auf die Webseite gelockt werden soll.
 
 Die Snippets werden über einen [Crawler](/crawler.py) , welcher den Python Web-Scraper [Silenium](https://selenium-python.readthedocs.io/) verwendet. Hier wird die Website jedes in der Forbes Top2000.csv befindlichen Unternehmens bei Bing gesucht und das entsprechende Snippet dem Datenpunkt hinzugefügt und in dem [output_forbes_dif_final.csv](/output_forbes_dif_final.csv) gespeichert.
 
-Da durch den Crawler nicht alle Snippets gezogen werden konnten und auch trotz Anpassung der Sucheinstellungen bei Bing auf nur deutsche Websiten teilweise englische Snippets gezogen wurden, überarbeiteten wir den Datensatz händisch noch einmal und besserten Snippets aus, sodass wir am Ende auf eine gesammt Anzahl von __1971__ Datenpunkten kamen.
+Da durch den Crawler nicht alle Snippets in ausreichender Qualität gezogen werden konnten und auch trotz Anpassung der Bing-Sucheinstellungen auf lediglich deutsche Webseiten, teilweise dennoch englische Snippets gezogen wurden, mussten wir den Datensatz händisch noch einmal überarbeiten. Snippets die zu wenig Informationen für eine zuverlässige Klassifizierung enthalten haben wurden ausgebessert, sodass wir am Ende auf eine Gesamtanzahl von __1971__ Datenpunkten gekommen sind.
 
 ## Datentransformation 
 Die Daten, die man über den Web-Scraper erhält, müssen zunächst vorverarbeitet werden, um einheitliche, durch Semikolon getrennte Datensätze zu erhalten. Für diese vorgeschobene Bearbeitung wurde die search and replace Funktion im Text Editor verwendet.
