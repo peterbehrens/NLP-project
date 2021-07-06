@@ -67,6 +67,8 @@ Für die finale Implementierung wurde das Model auf den gesamten Datensatz gefit
 
 Der Crawler und das Model wurden in einer Flask Application zusammengeführt, sodass über ein GUI eine Suchanfrage möglich ist, welche live das Snippet der eingeggebenen Firma sucht und klassifiziert. 
 
+Vor dem lokalen Deployment muss sichergestellt werden, dass Selenium für Python richtig installiert wurde und einsatzbereit ist. Hier ein [Link zur Doku](https://selenium-python.readthedocs.io)
+
 Zum lokalen Deployment muss folgendes ausgeführt werden:
 
 ```
