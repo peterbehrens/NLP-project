@@ -9,12 +9,13 @@ class Model:
         self.nlp = spacy.load('de_core_news_lg')
     
     def predict(self, snippet):
+        #Predict the Snippet
         snippet = self.prepare_snippets(snippet)
         prediction = self.clf.predict(snippet.reshape(1, -1))[0]
         return prediction
 
     def prepare_snippets(self, snippet, raw_string_return = False, remove_int = False, lowercase = True, stopwords = True, punctuations = True, only_nouns_n_adjs = True, lammatize = True, reduce=True, word_embeddings = True):
-        
+        #Preparation of the snippets
         if lowercase:
             snippet = snippet.lower()
         snippet = self.nlp(snippet)

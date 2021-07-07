@@ -24,6 +24,7 @@ class Crawler:
 
 
     def getSnippet(self, search_term):
+            # Method to get Snippet from Bing
 
             try:
                     self.browser.get("https://www.bing.com/search?q=" + search_term + " loc:de language:de")
@@ -40,8 +41,12 @@ class Crawler:
                     return snippet
             
             #snippet = browser.find_element_by_xpath("//div[contains(@class, 'b_caption hasdl')]")
+
+            #find Snippet on HTML page of search result
             snippet = self.browser.find_elements_by_xpath("//div[contains(@class, 'b_caption hasdl')]")
             #print(search_term)
+
+            #If no Snippet has been found look for Alternatives 
             if len(snippet) == 0:
                     snippet = self.browser.find_elements_by_xpath("//div[contains(@class, 'b_snippet')]")
                     try:
@@ -69,6 +74,7 @@ class Crawler:
 
 
 def writeSheet(your_df):
+        #Add Snippets to DF and save to csv
         global counter
         counter = 0
         global nan
@@ -82,6 +88,7 @@ def writeSheet(your_df):
 
                 print(snippet)
 
+                #check snippet of company, if it's empty add "NaN"
                 if(snippet==0 or snippet == " " or snippet == ""):
                         snippet = "NaN"
                         #print(row + [snippet])
